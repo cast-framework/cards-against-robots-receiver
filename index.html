@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CastFramework - Simple Receiver Example</title>
+    <!-- include Google's chromecast receiver code -->
+    <script type="text/javascript" src="http://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+    <!-- include jquery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- include the framework! -->
+    <script src="js/framework/CastFramework.js"></script>
+    <!-- include your own JS file(s) -->
+    <script src="js/main.js"></script>
+    <!-- since I'm using KnockoutJS, I need to include that library -->
+     <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-debug.js"></script>
+    <!-- in this case, I'm also including my view models -->
+    <script src="js/viewModels/table.js"></script>
+    <script src="js/viewModels/player.js"></script>
+    <script src="js/viewModels/card.js"></script>
+    <!-- include your own CSS file(s) -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <div id="table">
+        <!-- status dialog -->
+        <div id="status" class="floatingDialog" data-bind="text: status"></div>
+        <!-- score dialog -->
+        <div id="score" class="floatingDialog" data-bind="visible: players().length > 0">
+            <table>
+                <tbody data-bind="foreach: players">
+                    <tr>
+                        <td data-bind="
+                            text: (name || 'Player ' + ($index()+1)) + ':',
+                            css: {
+                                czar: table.czar() === $index()
+                            }"></td>
+                        <td class="player-score" data-bind="text: score || 0"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="cards">
+            <!-- black card -->
+            <!-- ko if: table.blackCard -->
+            <div class="card blackCard">
+                <span data-bind="
+                    visible: blackCard().flipped,
+                    text: blackCard().name
+                "></span>
+            </div>
+            <!-- /ko -->
+            <!-- white cards -->
+            <!-- ko foreach: selectedCards -->
+            <div class="card whiteCard" data-bind="text: name"></div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <script>
+        var table = new Table();
+        ko.applyBindings(table);
+    </script>
+</body>
+</html>
